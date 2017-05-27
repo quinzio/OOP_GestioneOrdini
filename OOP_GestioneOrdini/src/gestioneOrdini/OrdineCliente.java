@@ -10,6 +10,10 @@ public class OrdineCliente {
 	Map<String, LineaOrdineCliente> linee = new TreeMap<>();
 	private Stato stato = Stato.INSERITO;
 
+	public Stato getStato() {
+		return stato;
+	}
+
 	public Map<String, LineaOrdineCliente> getLinee() {
 		return linee;
 	}
@@ -23,8 +27,20 @@ public class OrdineCliente {
 		linee.put(linea.getNomeOrdine(), linea);
 	}
 
-	private enum Stato {
-		INSERITO, CONSEGNATO;
+	enum Stato {
+		INSERITO("Inserito"), CONSEGNATO("Consegnato");
+		
+		private String text;
+		
+		private Stato(String text) {
+			this.text = text;
+		}
+		
+		public String toString() {
+			return text;
+			
+		}
+		
 	}
 
 	public void checkConsegnato() {

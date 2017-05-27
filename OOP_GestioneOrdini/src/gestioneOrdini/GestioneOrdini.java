@@ -26,7 +26,7 @@ public class GestioneOrdini {
 	 * libreria,300,scaffale,120"); void addProdotti (String s) throws Exception
 	 * {
 	 */
-	void addProdotti(String s) throws Exception {
+	public void addProdotti(String s) throws Exception {
 		if (s == null)
 			throw new Exception("Null string");
 		try (Scanner scanner = new Scanner(s)) {
@@ -54,7 +54,7 @@ public class GestioneOrdini {
 	 * g.addFornitore("AlfaMobili", "divano2pT,poltronaT,libreria"); Nota: le
 	 * stringhe prodotti contengono nomi di prodotti separati da virgole.
 	 */
-	void addFornitore(String nomeF, String prodotti) throws Exception {
+	public void addFornitore(String nomeF, String prodotti) throws Exception {
 		if (nomeF == null)
 			throw new Exception("Null string");
 		if (prodotti == null)
@@ -83,7 +83,7 @@ public class GestioneOrdini {
 	 * codice dell'ordine; Si segnala un'eccezione se il codice esiste già, i
 	 * prodotti non sono distinti o non sono registrati nel sistema.
 	 **/
-	void addOrdineCliente(String codice, String cliente, String prodotti)
+	public void addOrdineCliente(String codice, String cliente, String prodotti)
 			throws Exception {
 		if (ordiniCliente.containsKey(codice))
 			throw new Exception();
@@ -121,7 +121,7 @@ public class GestioneOrdini {
 	 * Il metodo int getImportoOC throws Exception dà l'importo in base al
 	 * codice, con segnalazione di errore se non esiste l'ordine.
 	 **/
-	int getImportoOC(String codice) throws Exception {
+	public int getImportoOC(String codice) throws Exception {
 		if (ordiniCliente.containsKey(codice))
 			throw new Exception();
 		return ordiniCliente.get(codice).getLinee().values().stream()
@@ -146,7 +146,7 @@ public class GestioneOrdini {
 	 * 
 	 * 
 	 **/
-	void addOrdineFornitore(String codice, String fornitore, String linee)
+	public void addOrdineFornitore(String codice, String fornitore, String linee)
 			throws Exception {
 
 		OrdineFornitore of = new OrdineFornitore(codice, fornitore);
@@ -176,7 +176,7 @@ public class GestioneOrdini {
 	 * fornitore è già nello stato consegnato.
 	 * 
 	 **/
-	void consegnaFornitore(String codice) throws Exception {
+	public void consegnaFornitore(String codice) throws Exception {
 		ordiniFornitore.get(codice).consegnato();
 		ordiniFornitore.get(codice).getLinee().forEach(l -> {
 			l.changeStatoConsegnata();
@@ -200,7 +200,7 @@ public class GestioneOrdini {
 	 * cliente (nome) con nomi ordinati.
 	 */
 
-	SortedMap<String, Long> nOrdiniCliente() {
+	public SortedMap<String, Long> nOrdiniCliente() {
 		return ordiniCliente
 				.values()
 				.stream()
@@ -229,7 +229,7 @@ public class GestioneOrdini {
 	 * decrescenti e dei clienti si danno i nomi distinti e ordinati.
 	 *
 	 **/
-	SortedMap<Integer, TreeSet<String>> clientiTotaleOrdini() {
+	public SortedMap<Integer, TreeSet<String>> clientiTotaleOrdini() {
 		return ordiniCliente
 				.values()
 				.stream()
@@ -253,7 +253,7 @@ public class GestioneOrdini {
 	 * per n. di linee (degli ordini cliente); i n. di linee sono decrescenti e
 	 * dei prodotti si danno i nomi distinti e ordinati
 	 **/
-	SortedMap<Long, TreeSet<String>> prodottiNLinee() {
+	public SortedMap<Long, TreeSet<String>> prodottiNLinee() {
 		return lineeordine
 				.values()
 				.stream()
@@ -265,10 +265,21 @@ public class GestioneOrdini {
 				.collect(
 						Collectors.groupingBy(e -> e.getValue(), () -> {
 							return new TreeMap<>(Comparator.reverseOrder());
-						},
-						Collectors.mapping(e -> e.getKey(),
-								Collectors.toCollection(TreeSet::new))
-						));
+						}, Collectors.mapping(e -> e.getKey(),
+								Collectors.toCollection(TreeSet::new))));
+	}
+
+	public String getStatoOC(String codice) {
+		return ordiniCliente.get(codice).getStato().toString();
+	}
+
+	public String getImportoOF(String codice) {
+		return ordiniFornitore
+				.get(codice)
+				.getLinee()
+				.stream()
+				.collect(Collectors.summingInt(l -> l.getProdotto().getPrice()))
+				.toString();
 	}
 
 }
