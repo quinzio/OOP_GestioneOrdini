@@ -12,8 +12,8 @@ public class Fornitore {
 		super();
 		this.name = name;
 		this.prodottiF = prodottiF;
-		if (prodottiF == null) 
-			prodottiF = new ArrayList<>();
+		if (this.prodottiF == null) 
+			this.prodottiF = new ArrayList<>();
 	}
 	
 	public void addProdotto(Prodotto p) throws Exception
